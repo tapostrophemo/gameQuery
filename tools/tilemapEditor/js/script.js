@@ -109,6 +109,19 @@ var animations = (function() {
     	setType: function (newType) {
     		type = newType;
     	},
+
+        createSingleAnimation: function (animation, left) {
+            fragment.css({left: left, top: 5});
+
+            $("#animations").append(fragment.clone().attr("id","animation_"+counter));
+            var doma = $("#animation_"+counter);
+            $("#animation_"+counter+" .name").html(animation.name);
+            doma.data(ANIMATION_NS, animation);
+            doma.append("<div class='animationthumb' style=\"height: "+minMax(0,tilemap.tileHeight,70)+"px; width: "+minMax(0,tilemap.tileWidth,70)+"px; background: "+generateBackground(animation)+";\"></div>");
+
+            counter++;
+        },
+
         // add a new Animation
         add: function(/* should be some arguments there*/){
         	
@@ -129,18 +142,10 @@ var animations = (function() {
         	
         	switch (type){
         		case SINGLE:
-        			fragment.css({left: 8+120*tilemap.animations.length, top: 5});
-
-        			$("#animations").append(fragment.clone().attr("id","animation_"+counter));
-        			var doma = $("#animation_"+counter);
-		        	$("#animation_"+counter+" .name").html(animation.name);
-		        	doma.data(ANIMATION_NS, animation);
-		        	doma.append("<div class='animationthumb' style=\"height: "+minMax(0,tilemap.tileHeight,70)+"px; width: "+minMax(0,tilemap.tileWidth,70)+"px; background: "+generateBackground(animation)+";\"></div>");
-		        	
-		        	tilemap.animations.push(animation);
-		        	
-		        	counter++;
-        			break;
+                    var left = 8+120*tilemap.animations.length;
+                    this.createSingleAnimation(animation, 8+120*tilemap.animations.length);
+                    tilemap.animations.push(animation);
+                    break;
         		case MULTIPLE:
         			tilemap.multiple = true;
         			for (var i  = 0; i < animation.nbanimations; i++){
@@ -541,6 +546,17 @@ $(function(){
 		
 		$("#exportArea").val(exportText);
 	});
+
+    // Import JSON Tilemap Overlay
+    modalDialog.register("importJsonOverlay", "importJsonButton", function() {
+        tilemap = JSON.parse($("#importJsonArea").val());
+        setupGrid(tilemap.tileWidth, tilemap.tileHeight, tilemap.width, tilemap.height, "simple animations");
+        for (var i = 0; i < tilemap.animations.length; i++) {
+            var left = 8+120*i;
+            animations.createSingleAnimation(tilemap.animations[i], left);
+        }
+        return true;
+    });
     
     // New Tilemap Overlay
     modalDialog.register("newOverlay", "newButton", function(){
@@ -558,7 +574,13 @@ $(function(){
     	tilemap.height = mapHeight;
     	tilemap.tileWidth = tileWidth;
     	tilemap.tileHeight = tileHeight;
-    	 
+    	
+        setupGrid(tileWidth, tileHeight, mapWidth, mapHeight, animationType);
+
+        return true;
+	});
+
+    function setupGrid(tileWidth, tileHeight, mapWidth, mapHeight, animationType) {
         var fragment = $("<div class='grid'/>").css({width: tileWidth-1, height: tileHeight-1});
 		for(var i=0; i < mapHeight; i++) {
             for(var j=0; j < mapWidth; j++){
@@ -587,6 +609,6 @@ $(function(){
         $("#gridButton").removeClass("disabled");
         $("#saveButton").removeClass("disabled");
         $("#newButton").addClass("disabled");
-        return true;
-	});
+        $("#importJsonButton").addClass("disabled");
+    }
 });

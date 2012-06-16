@@ -22,7 +22,7 @@
                 <form id="newForm">
                     <table>
                         <tr>
-                             <td><label>number of tiles</label></td>
+                            <td><label>number of tiles</label></td>
                             <td><input class="intValue"  size="6" placeholder="width" id="newForm_input_map_width"/></td>
                             <td>x</td>
                             <td><input class="intValue" size="6" placeholder="height" id="newForm_input_map_height"/></td>
@@ -44,6 +44,21 @@
                             <td colspan="4"><button id="newOK" name="ok">create</button><button class="right" id="newCancel" name="cancel">cancel</button></td>
                         </tr>
                     </table>
+                </form>
+            </div>
+        </div>
+        <div class="overlay" id="importJsonOverlay">
+            <div class="header lobster">
+                Import JSON from existing Tilemap
+            </div>
+            <div class="content">
+                <form id="importJsonForm">
+                    <label>JSON</label>
+                    <br/>
+                    <textarea id="importJsonArea" style="font-family: monospace; height: 200px; width: 600px"></textarea>
+                    <br/>
+                    <button id="importJsonOK" name="ok">import&nbsp;JSON</button>
+                    <button class="right" id="importJsonCancel" name="cancel">cancel</button>
                 </form>
             </div>
         </div>
@@ -154,6 +169,7 @@
 		<span>
 			<span class="lobster">Tile Map Editor</span> &gt;&gt;
 			<button id="newButton">new</button>
+			<button id="importJsonButton">import JSON</button>
 			<button id="saveButton" class="disabled" style="width: 60px">export</button>
 			<button id="gridButton" class="disabled" style="width: 100px">grid on/off</button>
             <button id="helpButton" class="right">?</button>

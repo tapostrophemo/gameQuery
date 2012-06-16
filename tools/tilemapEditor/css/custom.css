@@ -248,6 +248,9 @@ div.tile{
     width: 20px;
 }
 
+#importJsonButton, #importJsonOK {
+    width: 90px;
+}
 
 #overlay {
 	display: none;
